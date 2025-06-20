@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Contact Limo LLC Services - 11 services</title>
+  <meta name="description" content="Professional services offered by Contact Limo LLC. 11 services available.">
+  
+  <!-- City Structured Data -->
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "Contact Limo LLC",
+  "description": "Contact Limo LLC is a fully licensed (License #198597) and reliable limousine and transportation service, proudly serving Kenosha, Wisconsin, and the surrounding areas. Our certified chauffeurs are trained to provide exceptional service and comfort to every passenger. Catering to individual travelers, businesses, and special event organizers, we offer a comprehensive range of services, including limo service, airport transportation, chauffeur service, transportation service, wedding service, charter limousine, business limousine, ORD limo service, MKE limo service, point-to-point limousine, and MDW limousine. Our opulent fleet, featuring 2023 SUV models, is designed to provide unparalleled luxury and a smooth travel experience. We specialize in flawless airport transfers and are committed to punctuality, ensuring that we are always on time for pickups and drop-offs. With no hidden fees and a customer-centric approach, we provide tailored transportation experiences that cater to your specific needs. Whether you require a sophisticated limousine for your wedding, reliable transportation for your business trips, or a convenient airport shuttle service, Contact Limo LLC is equipped to deliver top-rated customer service and exceed your expectations. Trust Contact Limo LLC for all your luxury transportation needs and experience the difference that comes with our dedication to excellence. License: #198597. Fleet: 2023 SUV Models. Experience: Top Rated Customer Service.",
+  "address": "10000 64TH Street, Kenosha, WI, 53142",
+  "telephone": "(262) 455-8841",
+  "email": "book@contactlimo.com",
+  "url": "https://contactlimo.com"
+}
+</script>
+  
+  <!-- Custom Structured Data -->
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "Contact Limo LLC",
+  "description": "Contact Limo LLC is a fully licensed (License #198597) and reliable limousine and transportation service, proudly serving Kenosha, Wisconsin, and the surrounding areas. Our certified chauffeurs are trained to provide exceptional service and comfort to every passenger. Catering to individual travelers, businesses, and special event organizers, we offer a comprehensive range of services, including limo service, airport transportation, chauffeur service, transportation service, wedding service, charter limousine, business limousine, ORD limo service, MKE limo service, point-to-point limousine, and MDW limousine. Our opulent fleet, featuring 2023 SUV models, is designed to provide unparalleled luxury and a smooth travel experience. We specialize in flawless airport transfers and are committed to punctuality, ensuring that we are always on time for pickups and drop-offs. With no hidden fees and a customer-centric approach, we provide tailored transportation experiences that cater to your specific needs. Whether you require a sophisticated limousine for your wedding, reliable transportation for your business trips, or a convenient airport shuttle service, Contact Limo LLC is equipped to deliver top-rated customer service and exceed your expectations. Trust Contact Limo LLC for all your luxury transportation needs and experience the difference that comes with our dedication to excellence. License: #198597. Fleet: 2023 SUV Models. Experience: Top Rated Customer Service.",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "10000 64TH Street",
+    "addressLocality": "Kenosha",
+    "addressRegion": "WI",
+    "postalCode": "53142",
+    "addressCountry": "United States"
+  },
+  "telephone": "(262) 455-8841",
+  "email": "book@contactlimo.com",
+  "hasMap": "https://www.google.com/maps?cid=16958596164118773240",
+  "serviceType": [
+    "Limo Service",
+    "Airport Transportation",
+    "Chauffeur Service",
+    "Transportation Service",
+    "Wedding Service",
+    "Charter Limousine",
+    "Business Limousine",
+    "ORD Limo Service",
+    "MKE Limo Service",
+    "Point To Point Limousine",
+    "MDW Limousine"
+  ]
+}
+</script>
+  
+  <!-- Leaflet CSS loaded directly -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+  
+  
+  <style>
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body { 
+      margin: 0; 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      background: #f8fafc;
+      height: 100vh;
+    }
+    
+    .main-container {
+      display: flex;
+      height: 100vh;
+      width: 100vw;
+      background: #ffffff;
+      gap: 0;
+    }
+    
+    .sidebar { 
+      width: 380px;
+      min-width: 380px;
+      max-width: 380px;
+      padding: 24px; 
+      background: white;
+      overflow-y: auto;
+      overflow-x: hidden;
+      border-right: 1px solid #e2e8f0;
+      position: relative;
+      z-index: 10;
+    }
+    
+    #map { 
+      flex: 1;
+      min-width: 0;
+      height: 100vh !important;
+      position: relative;
+      z-index: 1;
+      background: #f0f8ff;
+    }
+    
+    /* Ensure Leaflet map fills container properly */
+    .leaflet-container {
+      width: 100% !important;
+      height: 100% !important;
+      font: 12px/1.5 "Helvetica Neue", Arial, Helvetica, sans-serif;
+    }
+    
+    /* Enhanced popup styling */
+    .leaflet-popup-content-wrapper {
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      max-width: 300px;
+    }
+    
+    .leaflet-popup-content {
+      margin: 12px 16px;
+      line-height: 1.5;
+      font-size: 14px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    
+    .leaflet-popup-content h1,
+    .leaflet-popup-content h2,
+    .leaflet-popup-content h3 {
+      margin-top: 0;
+      margin-bottom: 8px;
+      color: #333;
+    }
+    
+    .leaflet-popup-content p {
+      margin-bottom: 8px;
+      color: #555;
+    }
+    
+    .leaflet-popup-content a {
+      color: #0066cc;
+      text-decoration: none;
+    }
+    
+    .leaflet-popup-content a:hover {
+      text-decoration: underline;
+    }
+    
+    .title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: #1e293b;
+      text-align: center;
+    }
+    
+    .tab { 
+      padding: 12px 16px; 
+      margin-bottom: 8px; 
+      background: #f8fafc; 
+      border: 1px solid #e2e8f0; 
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-weight: 500;
+    }
+    
+    .tab:hover {
+      background: #e2e8f0;
+      transform: translateY(-1px);
+    }
+    
+    .tab.active { 
+      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+      color: white;
+      border-color: #1d4ed8;
+      box-shadow: 0 4px 6px -1px rgb(59 130 246 / 0.3);
+    }
+    
+    .tab-subtitle {
+      font-size: 0.75rem;
+      opacity: 0.8;
+      margin-left: 4px;
+    }
+    
+    .global-content {
+      margin-bottom: 16px;
+      padding: 12px;
+      background: #f1f5f9;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      color: #475569;
+    }
+    
+    .attribution {
+      margin-top: 20px;
+      padding: 12px;
+      background: #f1f5f9;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      color: #64748b;
+      text-align: center;
+    }
+    
+    .social-links a {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    
+    .social-links a:hover {
+      text-decoration: underline;
+    }
+    
+    .pagination-links a:hover {
+      background: #1d4ed8 !important;
+      transform: translateY(-1px);
+    }
+    
+    .show-more-btn {
+      width: 100%;
+      padding: 10px;
+      margin: 12px 0;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+    
+    .show-more-btn:hover {
+      background: #e2e8f0;
+    }
+    
+    .seo-city-list {
+      opacity: 0.7;
+    }
+    
+    /* Company contact info styling */
+    .company-contact-info {
+      margin: 20px 0;
+      padding: 15px;
+      background: #f9f9f9;
+      border-radius: 8px;
+      border-top: 1px solid #ddd;
+    }
+    
+    .company-contact-info h3 {
+      margin-top: 0;
+      margin-bottom: 10px;
+      color: #333;
+      font-size: 1rem;
+    }
+    
+    .company-contact-info p {
+      margin: 5px 0;
+      font-size: 0.9rem;
+      color: #555;
+    }
+    
+    .company-contact-info a {
+      color: #0066cc;
+      text-decoration: none;
+    }
+    
+    .company-contact-info a:hover {
+      text-decoration: underline;
+    }
+    
+    /* Enhanced responsive iframe and video styles - FIXED HEIGHT */
+    .global-content iframe,
+    .global-content video,
+    .global-content embed,
+    .global-content object {
+      max-width: 100%;
+      width: 100%;
+      height: 200px;
+      border-radius: 6px;
+      box-shadow: 0 2px 4px rgb(0 0 0 / 0.1);
+    }
+    
+    .leaflet-popup-tip {
+      width: 12px;
+      height: 12px;
+    }
+    
+    .leaflet-control-zoom a {
+      border-radius: 4px;
+    }
+    
+    .leaflet-bar {
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    @media (max-width: 768px) {
+      .main-container { 
+        flex-direction: column; 
+        height: 100vh;
+      }
+      .sidebar { 
+        width: 100%; 
+        min-width: unset;
+        max-width: unset;
+        padding: 16px;
+        border-right: none;
+        border-bottom: 1px solid #e2e8f0;
+        flex-shrink: 0;
+        max-height: 50vh;
+        overflow-y: auto;
+      }
+      #map { 
+        flex: 1;
+        min-height: 0;
+        height: 50vh !important;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .sidebar {
+        padding: 12px;
+        max-height: 40vh;
+      }
+      #map {
+        height: 60vh !important;
+      }
+    }
+  
+  </style>
+</head>
+<body>
+  
+  <div class="main-container">
+    <div class="sidebar" id="sidebar">
+      <div class="title">Contact Limo LLC</div>
+      <div class="global-content"><h1><br></h1>
+<p>Contact Limo LLC is a fully licensed (License #198597) and reliable limousine and transportation service, proudly serving Kenosha, Wisconsin, and the surrounding areas. Our certified chauffeurs are trained to provide exceptional service and comfort to every passenger. Catering to individual travelers, businesses, and special event organizers, we offer a comprehensive range of services, including limo service, airport transportation, chauffeur service, transportation service, wedding service, charter limousine, business limousine, ORD limo service, MKE limo service, point-to-point limousine, and MDW limousine. Our opulent fleet, featuring 2023 SUV models, is designed to provide unparalleled luxury and a smooth travel experience. We specialize in flawless airport transfers and are committed to punctuality, ensuring that we are always on time for pickups and drop-offs. With no hidden fees and a customer-centric approach, we provide tailored transportation experiences that cater to your specific needs. Whether you require a sophisticated limousine for your wedding, reliable transportation for your business trips, or a convenient airport shuttle service, Contact Limo LLC is equipped to deliver top-rated customer service and exceed your expectations. Trust Contact Limo LLC for all your luxury transportation needs and experience the difference that comes with our dedication to excellence. License: #198597. Fleet: 2023 SUV Models. Experience: Top Rated Customer Service.</p>
+<h2>Our Services</h2>
+<ul>
+<li>Limo Service</li>
+<li>Airport Transportation</li>
+<li>Chauffeur Service</li>
+<li>Transportation Service</li>
+<li>Wedding Service</li>
+<li>Charter Limousine</li>
+<li>Business Limousine</li>
+<li>ORD Limo Service</li>
+<li>MKE Limo Service</li>
+<li>Point To Point Limousine</li>
+<li>MDW Limousine</li></ul>
+
+<div class="google-maps-embed" style="margin: 20px 0;">
+      <h3>Service Area</h3>
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2937.980046433428!2d-87.9298609!3d42.576946!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd09617f4d810933%3A0xeb59095c5b99fdf8!2sContact%20Limo%20LLC!5e0!3m2!1sen!2sus!4v1750370884552!5m2!1sen!2sus" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+</div>
+      <div id="tabs"></div>
+      
+<div class="services-links" style="margin: 20px 0;">
+  <h4 style="margin-bottom: 10px; color: #333;">Our Services:</h4>
+  <ul style="margin: 0; padding-left: 20px; list-style-type: disc;">
+    <li><a href="#limo-service" style="color: #0066cc; text-decoration: none;">Limo Service</a></li>
+<li><a href="#airport-transportation" style="color: #0066cc; text-decoration: none;">Airport Transportation</a></li>
+<li><a href="#chauffeur-service" style="color: #0066cc; text-decoration: none;">Chauffeur Service</a></li>
+<li><a href="#transportation-service" style="color: #0066cc; text-decoration: none;">Transportation Service</a></li>
+<li><a href="#wedding-service" style="color: #0066cc; text-decoration: none;">Wedding Service</a></li>
+<li><a href="#charter-limousine" style="color: #0066cc; text-decoration: none;">Charter Limousine</a></li>
+<li><a href="#business-limousine" style="color: #0066cc; text-decoration: none;">Business Limousine</a></li>
+<li><a href="#ord-limo-service" style="color: #0066cc; text-decoration: none;">ORD Limo Service</a></li>
+<li><a href="#mke-limo-service" style="color: #0066cc; text-decoration: none;">MKE Limo Service</a></li>
+<li><a href="#point-to-point-limousine" style="color: #0066cc; text-decoration: none;">Point To Point Limousine</a></li>
+<li><a href="#mdw-limousine" style="color: #0066cc; text-decoration: none;">MDW Limousine</a></li>
+  </ul>
+</div>
+<!-- SEO-Crawlable Service Content (Hidden but accessible to search engines) -->
+<div class="seo-service-content" style="position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden;">
+  
+<div id="limo-service" class="service-content-section" style="display: none;">
+  <h3>Limo Service</h3><p>Professional limo service services delivered with expertise and care.</p><p>Contact us today for expert limo service solutions.</p>
+</div>
+
+<div id="airport-transportation" class="service-content-section" style="display: none;">
+  <h3>Airport Transportation</h3><p>Professional airport transportation services delivered with expertise and care.</p><p>Contact us today for expert airport transportation solutions.</p>
+</div>
+
+<div id="chauffeur-service" class="service-content-section" style="display: none;">
+  <h3>Chauffeur Service</h3><p>Professional chauffeur service services delivered with expertise and care.</p><p>Contact us today for expert chauffeur service solutions.</p>
+</div>
+
+<div id="transportation-service" class="service-content-section" style="display: none;">
+  <h3>Transportation Service</h3><p>Professional transportation service services delivered with expertise and care.</p><p>Contact us today for expert transportation service solutions.</p>
+</div>
+
+<div id="wedding-service" class="service-content-section" style="display: none;">
+  <h3>Wedding Service</h3><p>Professional wedding service services delivered with expertise and care.</p><p>Contact us today for expert wedding service solutions.</p>
+</div>
+
+<div id="charter-limousine" class="service-content-section" style="display: none;">
+  <h3>Charter Limousine</h3><p>Professional charter limousine services delivered with expertise and care.</p><p>Contact us today for expert charter limousine solutions.</p>
+</div>
+
+<div id="business-limousine" class="service-content-section" style="display: none;">
+  <h3>Business Limousine</h3><p>Professional business limousine services delivered with expertise and care.</p><p>Contact us today for expert business limousine solutions.</p>
+</div>
+
+<div id="ord-limo-service" class="service-content-section" style="display: none;">
+  <h3>ORD Limo Service</h3><p>Professional ord limo service services delivered with expertise and care.</p><p>Contact us today for expert ord limo service solutions.</p>
+</div>
+
+<div id="mke-limo-service" class="service-content-section" style="display: none;">
+  <h3>MKE Limo Service</h3><p>Professional mke limo service services delivered with expertise and care.</p><p>Contact us today for expert mke limo service solutions.</p>
+</div>
+
+<div id="point-to-point-limousine" class="service-content-section" style="display: none;">
+  <h3>Point To Point Limousine</h3><p>Professional point to point limousine services delivered with expertise and care.</p><p>Contact us today for expert point to point limousine solutions.</p>
+</div>
+
+<div id="mdw-limousine" class="service-content-section" style="display: none;">
+  <h3>MDW Limousine</h3><p>Professional mdw limousine services delivered with expertise and care.</p><p>Contact us today for expert mdw limousine solutions.</p>
+</div>
+</div>
+      
+    <div class="social-links" style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #e2e8f0;">
+      <h4 style="margin: 0 0 8px 0; font-size: 0.9rem; font-weight: 600; color: #374151;">Find Us on the Web</h4>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+        <span style="font-size: 0.8rem;"><a href="https://contactlimo.com" target="_blank">Website</a></span> • <span style="font-size: 0.8rem;"><a href="https://www.facebook.com/booklimoservice" target="_blank">Facebook</a></span> • <span style="font-size: 0.8rem;"><a href="https://twitter.com/LimoContact" target="_blank">Twitter</a></span> • <span style="font-size: 0.8rem;"><a href="https://www.instagram.com/contactlimo/" target="_blank">Instagram</a></span> • <span style="font-size: 0.8rem;"><a href="https://www.linkedin.com/company/contact-limo-llc/" target="_blank">LinkedIn</a></span> • <span style="font-size: 0.8rem;"><a href="https://www.youtube.com/channel/UCZhSHdVgdjrT3QuMbJXOjbA" target="_blank">YouTube</a></span> • <span style="font-size: 0.8rem;"><a href="https://www.yelp.com/biz/contact-limo-llc-kenosha" target="_blank">Yelp</a></span>
+      </div>
+    </div>
+  
+      
+<div class="global-service-areas" style="margin: 20px 0; padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #007bff;">
+  <h3 style="margin-top: 0; color: #007bff;">Service Areas</h3>
+  <p style="margin: 10px 0;">We proudly serve the following areas:</p>
+  <ul style="margin: 10px 0; padding-left: 20px; list-style-type: disc;">
+    <li style="margin: 5px 0;"><a href="https://mikestffi9.github.io/aiport-transportation" style="color: #007bff; text-decoration: none;">Chicago Limo Service</a></li>
+<li style="margin: 5px 0;"><a href="https://aiport-transportation.vercel.app/" style="color: #007bff; text-decoration: none;">Milwaukee Limo Service</a></li>
+  </ul>
+</div>
+      <div class="company-contact-info" style="margin: 20px 0; padding: 15px; background: #f9f9f9; border-radius: 8px; border-top: 1px solid #ddd;">
+<h3 style="margin-top: 0;">Contact Information</h3>
+<p style="margin: 5px 0;"><strong>Address:</strong> 10000 64TH Street, Kenosha, WI, 53142</p>
+<p style="margin: 5px 0;"><strong>Phone:</strong> <a href="tel:(262) 455-8841" style="color: #0066cc;">(262) 455-8841</a></p>
+<p style="margin: 5px 0;"><strong>Email:</strong> <a href="mailto:book@contactlimo.com" style="color: #0066cc;">book@contactlimo.com</a></p>
+</div>
+
+      <div class="attribution">
+        Built with Interactive Map Builder<br>
+        Map data &copy; OpenStreetMap contributors
+      </div>
+    </div>
+    <div id="map"></div>
+  </div>
+  
+  
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script>
+    
+    (function() {
+      // ========== SERVICES DATA ==========
+      const services = [
+  {
+    "id": "service-limo-service-1750451132160-0",
+    "name": "Limo Service",
+    "description": "Professional limo service services",
+    "popupHtml": "<h3>Limo Service</h3><p>Professional limo service services delivered with expertise and care.</p><p>Contact us today for expert limo service solutions.</p>",
+    "anchor": "limo-service",
+    "seoTitle": "Limo Service - Contact Limo LLC",
+    "seoDescription": "Professional limo service services by Contact Limo LLC",
+    "serviceAreas": [],
+    "benefits": []
+  },
+  {
+    "id": "service-airport-transportation-1750451132160-1",
+    "name": "Airport Transportation",
+    "description": "Professional airport transportation services",
+    "popupHtml": "<h3>Airport Transportation</h3><p>Professional airport transportation services delivered with expertise and care.</p><p>Contact us today for expert airport transportation solutions.</p>",
+    "anchor": "airport-transportation",
+    "seoTitle": "Airport Transportation - Contact Limo LLC",
+    "seoDescription": "Professional airport transportation services by Contact Limo LLC",
+    "serviceAreas": [],
+    "benefits": []
+  },
+  {
+    "id": "service-chauffeur-service-1750451132160-2",
+    "name": "Chauffeur Service",
+    "description": "Professional chauffeur service services",
+    "popupHtml": "<h3>Chauffeur Service</h3><p>Professional chauffeur service services delivered with expertise and care.</p><p>Contact us today for expert chauffeur service solutions.</p>",
+    "anchor": "chauffeur-service",
+    "seoTitle": "Chauffeur Service - Contact Limo LLC",
+    "seoDescription": "Professional chauffeur service services by Contact Limo LLC",
+    "serviceAreas": [],
+    "benefits": []
+  },
+  {
+    "id": "service-transportation-service-1750451132160-3",
+    "name": "Transportation Service",
+    "description": "Professional transportation service services",
+    "popupHtml": "<h3>Transportation Service</h3><p>Professional transportation service services delivered with expertise and care.</p><p>Contact us today for expert transportation service solutions.</p>",
+    "anchor": "transportation-service",
+    "seoTitle": "Transportation Service - Contact Limo LLC",
+    "seoDescription": "Professional transportation service services by Contact Limo LLC",
+    "serviceAreas": [],
+    "benefits": []
+  },
+  {
+    "id": "service-wedding-service-1750451132160-4",
+    "name": "Wedding Service",
+    "description": "Professional wedding service services",
+    "popupHtml": "<h3>Wedding Service</h3><p>Professional wedding service services delivered with expertise and care.</p><p>Contact us today for expert wedding service solutions.</p>",
+    "anchor": "wedding-service",
+    "seoTitle": "Wedding Service - Contact Limo LLC",
+    "seoDescription": "Professional wedding service services by Contact Limo LLC",
+    "serviceAreas": [],
+    "benefits": []
+  },
+  {
+    "id": "service-charter-limousine-1750451132160-5",
+    "name": "Charter Limousine",
+    "description": "Professional charter limousine services",
+    "popupHtml": "<h3>Charter Limousine</h3><p>Professional charter limousine services delivered with expertise and care.</p><p>Contact us today for expert charter limousine solutions.</p>",
+    "anchor": "charter-limousine",
+    "seoTitle": "Charter Limousine - Contact Limo LLC",
+    "seoDescription": "Professional charter limousine services by Contact Limo LLC",
+    "serviceAreas": [],
+    "benefits": []
+  },
+  {
+    "id": "service-business-limousine-1750451132160-6",
+    "name": "Business Limousine",
+    "description": "Professional business limousine services",
+    "popupHtml": "<h3>Business Limousine</h3><p>Professional business limousine services delivered with expertise and care.</p><p>Contact us today for expert business limousine solutions.</p>",
+    "anchor": "business-limousine",
+    "seoTitle": "Business Limousine - Contact Limo LLC",
+    "seoDescription": "Professional business limousine services by Contact Limo LLC",
+    "serviceAreas": [],
+    "benefits": []
+  },
+  {
+    "id": "service-ord-limo-service-1750451132160-7",
+    "name": "ORD Limo Service",
+    "description": "Professional ord limo service services",
+    "popupHtml": "<h3>ORD Limo Service</h3><p>Professional ord limo service services delivered with expertise and care.</p><p>Contact us today for expert ord limo service solutions.</p>",
+    "anchor": "ord-limo-service",
+    "seoTitle": "ORD Limo Service - Contact Limo LLC",
+    "seoDescription": "Professional ord limo service services by Contact Limo LLC",
+    "serviceAreas": [],
+    "benefits": []
+  },
+  {
+    "id": "service-mke-limo-service-1750451132160-8",
+    "name": "MKE Limo Service",
+    "description": "Professional mke limo service services",
+    "popupHtml": "<h3>MKE Limo Service</h3><p>Professional mke limo service services delivered with expertise and care.</p><p>Contact us today for expert mke limo service solutions.</p>",
+    "anchor": "mke-limo-service",
+    "seoTitle": "MKE Limo Service - Contact Limo LLC",
+    "seoDescription": "Professional mke limo service services by Contact Limo LLC",
+    "serviceAreas": [],
+    "benefits": []
+  },
+  {
+    "id": "service-point-to-point-limousine-1750451132160-9",
+    "name": "Point To Point Limousine",
+    "description": "Professional point to point limousine services",
+    "popupHtml": "<h3>Point To Point Limousine</h3><p>Professional point to point limousine services delivered with expertise and care.</p><p>Contact us today for expert point to point limousine solutions.</p>",
+    "anchor": "point-to-point-limousine",
+    "seoTitle": "Point To Point Limousine - Contact Limo LLC",
+    "seoDescription": "Professional point to point limousine services by Contact Limo LLC",
+    "serviceAreas": [],
+    "benefits": []
+  },
+  {
+    "id": "service-mdw-limousine-1750451132160-10",
+    "name": "MDW Limousine",
+    "description": "Professional mdw limousine services",
+    "popupHtml": "<h3>MDW Limousine</h3><p>Professional mdw limousine services delivered with expertise and care.</p><p>Contact us today for expert mdw limousine solutions.</p>",
+    "anchor": "mdw-limousine",
+    "seoTitle": "MDW Limousine - Contact Limo LLC",
+    "seoDescription": "Professional mdw limousine services by Contact Limo LLC",
+    "serviceAreas": [],
+    "benefits": []
+  }
+];
+      // ===================================
+
+      console.log('Services script initialized with', services ? services.length : 0, 'services');
+
+      // Enhanced popup content cleaning (same as locations)
+      function cleanPopupContent(popupHtml) {
+        if (!popupHtml) return '';
+        
+        let cleaned = popupHtml.toString().trim();
+        
+        // Remove script tags that break Leaflet popups
+        cleaned = cleaned.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
+        
+        // Remove html, head, body tags that don't belong in popups
+        cleaned = cleaned.replace(/<\/?(?:html|head|body)\b[^>]*>/gi, '');
+        
+        // Remove DOCTYPE declarations
+        cleaned = cleaned.replace(/<!DOCTYPE[^>]*>/gi, '');
+        
+        // Remove title tags
+        cleaned = cleaned.replace(/<\/?title\b[^>]*>/gi, '');
+        
+        // Clean up excessive whitespace
+        cleaned = cleaned.replace(/\s+/g, ' ').trim();
+        
+        // If content is empty after cleaning, provide fallback
+        if (!cleaned || cleaned.length < 10) {
+          return '<p>Service information</p>';
+        }
+        
+        return cleaned;
+      }
+
+      // Global map variable (same as locations)
+      let globalMap = null;
+      let globalMarker = null;
+
+      function cleanupMap() {
+        if (globalMarker) {
+          try {
+            globalMarker.remove();
+          } catch (e) {
+            console.warn('Marker cleanup:', e);
+          }
+          globalMarker = null;
+        }
+        
+        if (globalMap) {
+          try {
+            globalMap.remove();
+          } catch (e) {
+            console.warn('Map cleanup:', e);
+          }
+          globalMap = null;
+        }
+
+        const mapContainer = document.getElementById('map');
+        if (mapContainer) {
+          mapContainer.innerHTML = '';
+        }
+      }
+
+      function initializeMap() {
+        console.log('Initializing services map...');
+
+        if (!services || !services.length) {
+          console.warn('No services data available');
+          document.getElementById('sidebar').innerHTML = '<div class="title">No services configured</div>';
+          document.getElementById('map').innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#64748b;background:#f8fafc;">Add services to display</div>';
+          return;
+        }
+
+        cleanupMap();
+
+        // Default center (Chicago metropolitan area)
+        const defaultCenter = [41.8781, -87.6298];
+        const defaultZoom = 8;
+        
+        try {
+          console.log('Creating services map at:', defaultCenter);
+          
+          globalMap = L.map('map', {
+            zoomControl: true,
+            attributionControl: true
+          }).setView(defaultCenter, defaultZoom);
+
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            maxZoom: 19
+          }).addTo(globalMap);
+
+          // Force map to recognize container size
+          setTimeout(() => {
+            if (globalMap) {
+              globalMap.invalidateSize();
+            }
+          }, 100);
+
+          const firstService = services[0];
+          const popupContent = cleanPopupContent(firstService.popupHtml) || '<h3>' + firstService.name + '</h3>';
+          
+          globalMarker = L.marker(defaultCenter)
+            .addTo(globalMap)
+            .bindPopup(popupContent, {
+              maxWidth: 300,
+              maxHeight: 400,
+              autoPan: true,
+              closeButton: true,
+              autoClose: false,
+              className: 'custom-popup'
+            })
+            .openPopup();
+
+          console.log('Services map initialized successfully');
+
+          // Build sidebar navigation and setup anchor link handlers
+          buildServicesNavigation();
+          setupAnchorLinkHandlers();
+          
+        } catch (error) {
+          console.error('Error initializing services map:', error);
+          document.getElementById('map').innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#dc2626;background:#f8fafc;">Error loading map: ' + error.message + '</div>';
+        }
+      }
+
+      function buildServicesNavigation() {
+        const tabsContainer = document.getElementById('tabs');
+        if (!tabsContainer) return;
+
+        // Clear and build ONLY navigation tabs (not service content)
+        tabsContainer.innerHTML = '';
+        
+        services.forEach(function(service, index) {
+          const navLink = document.createElement('a');
+          navLink.className = 'tab' + (index === 0 ? ' active' : '');
+          navLink.href = '#' + (service.anchor || service.id || '');
+          navLink.innerHTML = service.name;
+          navLink.style.textDecoration = 'none';
+          navLink.style.color = 'inherit';
+          navLink.style.display = 'block';
+          navLink.style.padding = '10px 15px';
+          navLink.style.margin = '2px 0';
+          navLink.style.borderRadius = '4px';
+          navLink.style.transition = 'background-color 0.2s';
+          
+          navLink.onclick = function(e) {
+            e.preventDefault();
+            switchToService(index);
+          };
+          
+          tabsContainer.appendChild(navLink);
+        });
+      }
+
+      function switchToService(serviceIndex) {
+        const service = services[serviceIndex];
+        if (!service) return;
+        
+        console.log('Navigating to service:', service.name);
+        
+        // Update active state in tabs
+        document.querySelectorAll('.tab').forEach(function(t) { 
+          t.classList.remove('active'); 
+        });
+        document.querySelectorAll('.tab')[serviceIndex]?.classList.add('active');
+        
+        // Update map popup with full service content
+        if (globalMap && globalMarker) {
+          const popupContent = cleanPopupContent(service.popupHtml) || '<h3>' + service.name + '</h3>';
+          globalMarker.setPopupContent(popupContent).openPopup();
+        }
+      }
+
+      function setupAnchorLinkHandlers() {
+        // Setup click handlers for anchor links in the services list
+        services.forEach(function(service, index) {
+          const anchorId = service.anchor || service.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+          const anchorLinks = document.querySelectorAll('a[href="#' + anchorId + '"]');
+          
+          anchorLinks.forEach(function(link) {
+            link.onclick = function(e) {
+              e.preventDefault();
+              console.log('Anchor link clicked for service:', service.name);
+              switchToService(index);
+              
+              // Scroll to top of sidebar to show the active tab
+              const sidebar = document.getElementById('sidebar');
+              if (sidebar) {
+                sidebar.scrollTop = 0;
+              }
+            };
+          });
+        });
+      }
+
+      // Single initialization function (same as locations)
+      function init() {
+        if (typeof L !== 'undefined' && document.getElementById('map')) {
+          console.log('Leaflet ready, initializing services...');
+          setTimeout(initializeMap, 50);
+        } else {
+          console.log('Waiting for Leaflet...');
+          setTimeout(init, 100);
+        }
+      }
+
+      // Start initialization
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+
+      // Cleanup on page unload
+      window.addEventListener('beforeunload', cleanupMap);
+    })();
+  
+  </script>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(function() {
+          document.dispatchEvent(new Event('prerender-ready'));
+          console.log('Services page prerender ready');
+        }, 1000);
+      });
+    </script>
+</body>
+</html>
